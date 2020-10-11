@@ -73,98 +73,52 @@ w
 sudo pvcreate PV /dev/sdb1
 pvdisplay
 ```
-4. 
+4. Il est préférable de le nommer **vg01** car c'est la premiere partition du disque  
 ```bash
 sudo vgcreate VG_new /dev/sdb1
 ```
-Il est préférable de nommer le nouveau volume vg01 pour indiquer que c'est la premiere partition du disque.
-![affichage Capture](Capture.PNG)
+![affichage Capture](Capture.png)
 
-
-### 5. Créez un volume logique appelé lvData occupant l’intégralité de l’espace disque disponible
-```
+5. Le nom du volume s'appelle lvol0 ce qui est attendu est lvData, la commande **lvscan** permet de lister les les volume créer et après l'avoir supprimer on peut recréer, quant à l'option **-n** qui permet d'ajouter un nom 
+```bash
 sudo lvcreate -l 100%FREE VG_new
-```
-le nom du volume s'appelle lvol0 ce qui est attendu est lvData
-
-```
 lvscan
-```
-cette commande me permet de lister les les volume créer
-
-```
 sudo lvremove /dev/VG_new/lvol0
-```
-après l'avoir supprimer je peux le creer de nouveau et avec l'option '-n' ajouter le nom 
-```
 sudo lvcreate -l 100%FREE VG_new -n lvData
 sudo lvdisplay
 ```
-
-![affichage CaptureLV](CaptureLV.PNG)
-
-
-
-### 6. Dans ce volume logique, créez une partition que vous formaterez en ext4, puis procédez comme dans l’exercice 1 pour qu’elle soit montée automatiquement, au démarrage de la machine, dans /data.
-
-```
+![affichage Capture2](Capture2.png)  
+6. On commence par créer la partition puis on formate au format ext4 et on monte le nouveau LV
+```bash
 sudo fdisk /dev/mapper/VG_new-lvData
-[ENTRER]
-[ENTRER]
-[ENTRER]
-[ENTRER]
 w
-``` 
-Création de la partition effectuée
 
-```
 sudo mkfs.ext4 /dev/mapper/VG_new-lvData
 
-```
-formatage au format ext4
-
-```
 sudo nano /etc/fstab
 /dev/mapper/VG_new-lvData /data2 ext4 defaults 0 0  
 
-cd /
 sudo mkdir data2
 sudo mount /dev/mapper/VG_new-lvData  /data2
 sudo mount -a
 df -T
 ```
-montage du nouveau LV même apres rédémarrage
-
-### 7. Eteignez la VM pour ajouter un second disque (peu importe la taille pour cet exercice). Redémarrez la VM, vérifiez que le disque est bien présent. Puis, répétez les questions 2 et 3 sur ce nouveau disque
-
-
-```
-lsblk
-```
-le disque 'sdc' apparaît bien.
+7.**lsblk** le disque apparaît bien
 
 2.
-```
+```bash
 sudo fdisk /dev/sdc
-[ENTRER]
-[ENTRER]
-[ENTRER]
-[ENTRER]
 
 t
 8e
 w
-
 ```
-
-
 3.
-
-```
+```bash
 sudo pvcreate PV_new2 /dev/sdc1
 sudo pvscan
 ```
-![affichage CapturePVExo2Q7](CapturePVExo2Q7.PNG)
+![affichage Capture3](Capture3.png)
 
 
 ### 2. Est-ce que le message s’est affiché ? Si la réponse est non, essayez de trouver la cause du problème (par exemple en vous aidant des logs, du manuel...) 
