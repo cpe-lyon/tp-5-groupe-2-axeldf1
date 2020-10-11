@@ -87,7 +87,7 @@ sudo lvremove /dev/VG_new/lvol0
 sudo lvcreate -l 100%FREE VG_new -n lvData
 sudo lvdisplay
 ```
-![affichage Capture2](Capture2.png)  
+![affichage Capture2](Capture2.PNG)  
 6. On commence par créer la partition puis on formate au format ext4 et on monte le nouveau LV
 ```bash
 sudo fdisk /dev/mapper/VG_new-lvData
@@ -103,8 +103,10 @@ sudo mount /dev/mapper/VG_new-lvData  /data2
 sudo mount -a
 df -T
 ```
-7.**lsblk** le disque apparaît bien
-
+7.**lsblk** le disque apparaît bien  
+8.  
+9.  
+## Exercice 3. Exécution de commandes en différé : at et cron
 2.
 ```bash
 sudo fdisk /dev/sdc
@@ -118,41 +120,25 @@ w
 sudo pvcreate PV_new2 /dev/sdc1
 sudo pvscan
 ```
-![affichage Capture3](Capture3.png)
-
-
-### 2. Est-ce que le message s’est affiché ? Si la réponse est non, essayez de trouver la cause du problème (par exemple en vous aidant des logs, du manuel...) 
-
-Cela ne fonction pas car il n'y a pas de service mail
-
-### 3. Pour tester le fonctionnement de cron, commencez par programmer l’exécution d’une tâche simple, l’affichage de “Il faut réviser pour l’examen !”, toutes les 3 minutes.
-
-```sudo nano etc/crontab```
-
-
-### 4. Programmez l’exécution d’une commande tous les jours, toute l’année, tous les quarts d’heure 
-
-```sudo nano etc/crontab```
- ```/30 12 * * * echo "il faut réviser encore"```
- ```/15 * * * * echo "il faut réviser encore tout les 15 min"```
-
-### 5. Programmez l’exécution d’une commande toutes les cinq minutes à partir de 2 (2, 7, 12, etc.) à 18 heures les 1er et 15 du mois : 
-
-```sudo nano etc/crontab```
-```*/5/2 18 * 1-15 * echo "il faut réviser encore les 1er et 15 du mois"```
-
-### 6. Programmez l’exécution d’une commande du lundi au vendredi à 17 heures
-
-```sudo nano etc/crontab```
-```* 17 1-5 * * echo "il faut réviser encore les lundi au vendredi "```
-
-
-### 7. Modifiez votre crontab pour que les messages ne soient plus envoyés par mail, mais redirigés dans un fichier de log situé dans votre dossier personnel
-
-```touch cronlog```
-```sudo nano etc/crontab```
-
-```*/3 * * * * echo "il faut réviser" >> /home/louis/cronlog```
+![affichage Capture3](Capture3.PNG)  
+2. Non, il n'y a pas de service mail donc ça ne fonctionne pas  
+3. **sudo nano etc/crontab**  
+4.  
+**sudo nano etc/crontab**  : journalier  
+**/30 12 * * * echo "il faut réviser encore"**  :  annuel  
+**/15 * * * * echo "il faut réviser encore tout les 15 min"**  :  15 min  
+5. 
+**sudo nano etc/crontab**
+__*/5/2 18 * 1-15 * echo "il faut réviser encore les 1er et 15 du mois"__  
+6.
+**sudo nano etc/crontab**
+__* 17 1-5 * * echo "il faut réviser encore les lundi au vendredi "__  
+7. 
+```bash
+touch cronlog
+sudo nano etc/crontab
+*/3 * * * * echo "il faut réviser" >> /home/louis/cronlog
+```
 
 
 
